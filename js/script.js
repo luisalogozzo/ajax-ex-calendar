@@ -7,10 +7,6 @@ baseMonth = moment(
   }
 )
 
-
-
-var DaysInMonth = baseMonth.daysInMonth();
-console.log(DaysInMonth);
 console.log(baseMonth.format("-M"));
 printMonth(baseMonth);
 printHoliday(baseMonth);
@@ -18,14 +14,13 @@ printHoliday(baseMonth);
 
 function printMonth(month) {
   $('#title').html(month.format("MMMM YYYY"));
+  var DaysInMonth = baseMonth.daysInMonth();
   for (var i = 1; i <= DaysInMonth; i++) {
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);
     var context = {
       date: moment(i + month.format("-MMMM"), "D-MMMM", true).format('D MMMM'),
     };
-
-    // console.log(context.date);
     var html = template(context);
     $('.days-list').append(html);
   }
@@ -46,6 +41,8 @@ $('#prev').click(function () {
 });
 
 function printHoliday(month) {
+  var DaysInMonth = baseMonth.daysInMonth();
+
   $.ajax( {
     url: 'https://flynn.boolean.careers/exercises/api/holidays',
     method: 'GET',
