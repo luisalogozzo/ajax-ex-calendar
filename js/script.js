@@ -7,6 +7,8 @@ baseMonth = moment(
   }
 )
 
+
+
 var DaysInMonth = baseMonth.daysInMonth();
 console.log(DaysInMonth);
 console.log(baseMonth.format("-M"));
@@ -15,6 +17,7 @@ printHoliday(baseMonth);
 
 
 function printMonth(month) {
+  $('#title').html(month.format("MMMM YYYY"));
   for (var i = 1; i <= DaysInMonth; i++) {
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);
@@ -30,8 +33,16 @@ function printMonth(month) {
 }
 
 $('#next').click(function () {
-  var month = moment(thisMonth).add(1, 'month');
-
+  $('.days-list').html('');
+  baseMonth = baseMonth.add(1, 'month');
+  printMonth(baseMonth);
+  printHoliday(baseMonth);
+});
+$('#prev').click(function () {
+  $('.days-list').html('');
+  baseMonth = baseMonth.subtract(1, 'month');
+  printMonth(baseMonth);
+  printHoliday(baseMonth);
 });
 
 function printHoliday(month) {
@@ -43,8 +54,11 @@ function printHoliday(month) {
       month: month.month()
     },
     success: function (risposta) {
-      console.log(risposta.response[0].date);
-      for (var i = 0; i < risposta.response.length; i++) {
+      console.log(risposta.response);
+      for (var i in risposta.response) {
+
+
+      // for (var i = 0; i < risposta.response.length; i++) {
         var holiday = moment(risposta.response[i].date, 'YYYY-MM-DD', true).format('D MMMM');
         console.log(holiday);
         for (var k = 0; k <= DaysInMonth; k++) {
